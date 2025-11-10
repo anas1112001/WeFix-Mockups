@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeFix - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .login-form {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #F78F1E;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(247, 143, 30, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #F78F1E;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 30px;
+        }
+
+        .forgot-password a {
+            color: #F78F1E;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #E67E00;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(247, 143, 30, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .demo-credentials {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .demo-credentials h3 {
+            color: #0369a1;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .demo-credentials p {
+            color: #0c4a6e;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .demo-credentials strong {
+            color: #075985;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 143, 30, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .otp-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .otp-input {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #F78F1E;
+            box-shadow: 0 0 0 3px rgba(247, 143, 30, 0.1);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: #22c55e;
+            margin-bottom: 20px;
+        }
+
+        .success-message h3 {
+            color: #22c55e;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+
+            .login-header {
+                padding: 30px 20px;
+            }
+
+            .login-header h1 {
+                font-size: 28px;
+            }
+
+            .login-form {
+                padding: 30px 20px;
+            }
+
+            .form-group-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .otp-input {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔐 WeFix</h1>
+            <p>Welcome back! Please sign in to your account</p>
+        </div>
+
+        <div class="login-form">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" placeholder="Enter your username" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="password" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="openForgotPasswordModal()">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+
+            <div class="demo-credentials">
+                <h3>🔑 Demo Credentials</h3>
+                <p><strong>Username:</strong> superadmin</p>
+                <p><strong>Password:</strong> superadmin@123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔒 Forgot Password</h3>
+                <button class="close-btn" onclick="closeForgotPasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="forgotPasswordStep1">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="forgotUsername" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Enter last 4 digits of registered mobile number</label>
+                        <input type="text" class="form-input" id="forgotMobile" placeholder="Enter last 4 digits" maxlength="4">
+                    </div>
+                </div>
+
+                <div id="forgotPasswordStep2" style="display: none;">
+                    <div class="otp-container">
+                        <h3 style="margin-bottom: 20px; color: #374151;">Enter OTP</h3>
+                        <p style="color: #6b7280; margin-bottom: 30px;">We've sent a verification code to your registered mobile number</p>
+                        <div style="display: flex; justify-content: center; gap: 10px;">
+                            <input type="text" class="otp-input" id="otp1" maxlength="1" oninput="moveToNext(this, 'otp2')">
+                            <input type="text" class="otp-input" id="otp2" maxlength="1" oninput="moveToNext(this, 'otp3')">
+                            <input type="text" class="otp-input" id="otp3" maxlength="1" oninput="moveToNext(this, 'otp4')">
+                            <input type="text" class="otp-input" id="otp4" maxlength="1" oninput="moveToNext(this, null)">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="forgotPasswordStep3" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <div class="password-container">
+                            <input type="password" class="form-input" id="newPassword" placeholder="Enter new password">
+                            <button type="button" class="password-toggle" onclick="toggleNewPassword()">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="password-container">
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password">
+                            <button type="button" class="password-toggle" onclick="toggleConfirmPassword()">👁️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="forgotPasswordSuccess" style="display: none;">
+                    <div class="success-message">
+                        <div class="success-icon">✅</div>
+                        <h3>Password Changed Successfully!</h3>
+                        <p>Your password has been updated. You can now sign in with your new password.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="forgotPasswordFooter">
+                <button type="button" class="btn-secondary" onclick="closeForgotPasswordModal()">Cancel</button>
+                <button type="button" class="btn-primary" id="forgotPasswordBtn" onclick="handleForgotPassword()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let currentStep = 1;
+        let generatedOTP = '';
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'superadmin' && password === 'superadmin@123') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful!',
+                    text: 'Welcome to WeFix Dashboard',
+                    confirmButtonColor: '#F78F1E',
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    // Redirect to dashboard
+                    window.location.href = 'index.html';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: 'Invalid username or password',
+                    confirmButtonColor: '#F78F1E'
+                });
+            }
+        });
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        function toggleNewPassword() {
+            const passwordInput = document.getElementById('newPassword');
+            const toggleBtn = document.querySelectorAll('.password-toggle')[1];
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        function toggleConfirmPassword() {
+            const passwordInput = document.getElementById('confirmPassword');
+            const toggleBtn = document.querySelectorAll('.password-toggle')[2];
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        // Forgot password modal
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('active');
+            resetForgotPasswordForm();
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+            resetForgotPasswordForm();
+        }
+
+        function resetForgotPasswordForm() {
+            currentStep = 1;
+            document.getElementById('forgotPasswordStep1').style.display = 'block';
+            document.getElementById('forgotPasswordStep2').style.display = 'none';
+            document.getElementById('forgotPasswordStep3').style.display = 'none';
+            document.getElementById('forgotPasswordSuccess').style.display = 'none';
+            document.getElementById('forgotPasswordBtn').textContent = 'Send';
+            document.getElementById('forgotPasswordBtn').onclick = handleForgotPassword;
+            
+            // Clear all inputs
+            document.getElementById('forgotUsername').value = '';
+            document.getElementById('forgotMobile').value = '';
+            document.getElementById('otp1').value = '';
+            document.getElementById('otp2').value = '';
+            document.getElementById('otp3').value = '';
+            document.getElementById('otp4').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function handleForgotPassword() {
+            if (currentStep === 1) {
+                const username = document.getElementById('forgotUsername').value;
+                const mobile = document.getElementById('forgotMobile').value;
+
+                if (!username || !mobile) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please fill all fields',
+                        confirmButtonColor: '#F78F1E'
+                    });
+                    return;
+                }
+
+                if (username !== 'superadmin') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Username',
+                        text: 'Username not found',
+                        confirmButtonColor: '#F78F1E'
+                    });
+                    return;
+                }
+
+                if (mobile !== '1234') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Mobile',
+                        text: 'Last 4 digits do not match our records',
+                        confirmButtonColor: '#F78F1E'
+                    });
+                    return;
+                }
+
+                // Generate OTP
+                generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'OTP Sent!',
+                    text: `Verification code: ${generatedOTP}`,
+                    confirmButtonColor: '#F78F1E',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+
+                // Move to step 2
+                currentStep = 2;
+                document.getElementById('forgotPasswordStep1').style.display = 'none';
+                document.getElementById('forgotPasswordStep2').style.display = 'block';
+                document.getElementById('forgotPasswordBtn').textContent = 'Verify';
+                document.getElementById('forgotPasswordBtn').onclick = verifyOTP;
+
+            } else if (currentStep === 2) {
+                verifyOTP();
+            } else if (currentStep === 3) {
+                changePassword();
+            }
+        }
+
+        function verifyOTP() {
+            const otp1 = document.getElementById('otp1').value;
+            const otp2 = document.getElementById('otp2').value;
+            const otp3 = document.getElementById('otp3').value;
+            const otp4 = document.getElementById('otp4').value;
+            const enteredOTP = otp1 + otp2 + otp3 + otp4;
+
+            if (enteredOTP !== generatedOTP) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid OTP',
+                    text: 'Please enter the correct verification code',
+                    confirmButtonColor: '#F78F1E'
+                });
+                return;
+            }
+
+            // Move to step 3
+            currentStep = 3;
+            document.getElementById('forgotPasswordStep2').style.display = 'none';
+            document.getElementById('forgotPasswordStep3').style.display = 'block';
+            document.getElementById('forgotPasswordBtn').textContent = 'Change Password';
+            document.getElementById('forgotPasswordBtn').onclick = changePassword;
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!newPassword || !confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill all fields',
+                    confirmButtonColor: '#F78F1E'
+                });
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'New password and confirm password do not match',
+                    confirmButtonColor: '#F78F1E'
+                });
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Weak Password',
+                    text: 'Password must be at least 6 characters long',
+                    confirmButtonColor: '#F78F1E'
+                });
+                return;
+            }
+
+            // Show success message
+            currentStep = 4;
+            document.getElementById('forgotPasswordStep3').style.display = 'none';
+            document.getElementById('forgotPasswordSuccess').style.display = 'block';
+            document.getElementById('forgotPasswordFooter').style.display = 'none';
+
+            // Auto close after 3 seconds and redirect to login
+            setTimeout(() => {
+                closeForgotPasswordModal();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Password Changed!',
+                    text: 'Your password has been updated successfully',
+                    confirmButtonColor: '#F78F1E',
+                    timer: 2000,
+                    timerProgressBar: true
+                });
+            }, 3000);
+        }
+
+        // OTP input navigation
+        function moveToNext(currentInput, nextInputId) {
+            if (currentInput.value.length === 1) {
+                if (nextInputId) {
+                    document.getElementById(nextInputId).focus();
+                } else {
+                    currentInput.blur();
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('forgotPasswordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeForgotPasswordModal();
+            }
+        });
+
+        // Demo credentials auto-fill
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-fill demo credentials for easy testing
+            setTimeout(() => {
+                document.getElementById('username').value = 'superadmin';
+                document.getElementById('password').value = 'superadmin@123';
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+

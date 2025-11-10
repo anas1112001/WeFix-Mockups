@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeFix | إنشاء تذكرة (تطبيق الجوال)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(180deg, #fef5e5 0%, #ffffff 100%);
+            color: #222;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px 12px 48px;
+        }
+
+        .app-shell {
+            width: min(420px, 100%);
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 18px 40px rgba(230, 126, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+body {
+    direction: ltr;
+}
+
+.app-header {
+            padding: 20px 20px 16px;
+            background: linear-gradient(135deg, #E67E00 0%, #F78F1E 100%);
+            color: #fff;
+        }
+
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .company-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .company-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tabs-bar {
+            display: flex;
+            overflow-x: auto;
+            background: #fff;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .tabs-bar button {
+            flex: 1;
+            padding: 14px 6px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tabs-bar button.active {
+            color: #E67E00;
+            border-bottom-color: #E67E00;
+            background: rgba(230, 126, 0, 0.07);
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(247, 143, 30, 0.04) 0%, rgba(255, 255, 255, 0) 30%);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #E67E00;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        label .required {
+            color: #EF4444;
+            margin-inline-start: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border: 1px solid #e4e4e7;
+            border-radius: 14px;
+            font-size: 14px;
+            padding: 12px 14px;
+            background: #fff;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #E67E00;
+            box-shadow: 0 0 0 3px rgba(230, 126, 0, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 95px;
+        }
+
+        .chips-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip-toggle input {
+            display: none;
+        }
+
+        .chip-toggle span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background-color: #f3f4f6;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .chip-toggle input:checked + span {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 6px 18px rgba(230, 126, 0, 0.22);
+        }
+
+        .summary-card {
+            background: #fff7ec;
+            border: 1px solid #ffedd5;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .summary-item strong {
+            color: #E67E00;
+        }
+
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            border: none;
+            border-radius: 16px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #CBD5F5;
+            color: #475569;
+        }
+
+        .btn-primary.confirm {
+            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+        }
+
+        .step-footer {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .step-footer button {
+            background: none;
+            border: none;
+            color: #E67E00;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .confirmation-banner {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.18);
+            color: #065F46;
+            font-size: 14px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .confirmation-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .confirmation-checkbox input {
+            width: 22px;
+            height: 22px;
+            accent-color: #10B981;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <h1>Create New Ticket</h1>
+            <div class="company-meta">
+                <span>🏢 TechCorp Solutions</span>
+                <span>📍 Amman - Shmeisani</span>
+                <span>👤 Signed in as: Team Leader</span>
+            </div>
+        </header>
+
+        <nav class="tabs-bar" id="tabBar">
+            <button type="button" class="active" data-tab="customer">Site Info</button>
+            <button type="button" data-tab="ticket">Ticket Details</button>
+            <button type="button" data-tab="service">Requested Services</button>
+            <button type="button" data-tab="tools">Tools & Files</button>
+            <button type="button" data-tab="confirm">Review & Submit</button>
+        </nav>
+
+        <main class="content">
+            <form id="mobileTicketForm">
+                <!-- Customer -->
+                <section class="tab-panel active" id="tab-customer">
+                    <h2 class="section-title">Site Details</h2>
+                    <div class="form-group">
+                        <label>Branch</label>
+                        <select name="branch">
+                            <option value="">Select branch</option>
+                            <option>Amman Branch</option>
+                            <option>Zarqa Branch</option>
+                            <option>Aqaba Branch</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Zone</label>
+                        <select name="zone">
+                            <option value="">Select zone</option>
+                            <option>North</option>
+                            <option>South</option>
+                            <option>Downtown</option>
+                            <option>Industrial Area</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location Notes</label>
+                        <textarea name="locationNotes" placeholder="Example: 3rd floor, next to the main elevator"></textarea>
+                    </div>
+                    <div class="step-footer">
+                        <span>Ready for the next step?</span>
+                        <button type="button" data-next>Next</button>
+                    </div>
+                </section>
+
+                <!-- Ticket -->
+                <section class="tab-panel" id="tab-ticket">
+                    <h2 class="section-title">Ticket Details</h2>
+                    <div class="form-group">
+                        <label>Ticket Type <span class="required">*</span></label>
+                        <div class="chips-group">
+                            <label class="chip-toggle">
+                                <input type="radio" name="ticketType" value="corrective">
+                                <span>Corrective</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="radio" name="ticketType" value="preventive">
+                                <span>Preventive</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="radio" name="ticketType" value="emergency">
+                                <span>Emergency</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="ticketCategory">
+                            <option value="">Choose category</option>
+                            <option value="scheduled">Scheduled Visit</option>
+                            <option value="asap">Needs Urgent Response</option>
+                            <option value="followup">Follow-up Visit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Status</label>
+                        <select name="ticketStatus">
+                            <option value="pending">Pending Submission</option>
+                            <option value="assigned">Assigned</option>
+                            <option value="scheduled">Scheduled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ticket Date</label>
+                        <input type="date" name="ticketDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Time Window</label>
+                        <select name="ticketSlot">
+                            <option value="">Select time window</option>
+                            <option value="8-10">08:00 - 10:00</option>
+                            <option value="10-12">10:00 - 12:00</option>
+                            <option value="12-14">12:00 - 14:00</option>
+                            <option value="14-16">14:00 - 16:00</option>
+                            <option value="16-18">16:00 - 18:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="ticketDescription" placeholder="Add ticket details or customer notes"></textarea>
+                    </div>
+                    <div class="step-footer">
+                        <button type="button" data-prev>Back</button>
+                        <button type="button" data-next>Next</button>
+                    </div>
+                </section>
+
+                <!-- Service -->
+                <section class="tab-panel" id="tab-service">
+                    <h2 class="section-title">Service Selection</h2>
+                    <div class="form-group">
+                        <label>Main Service <span class="required">*</span></label>
+                        <select name="mainService">
+                            <option value="">Choose service</option>
+                            <option value="electrical">Electrical Works</option>
+                            <option value="plumbing">Plumbing & Mechanical</option>
+                            <option value="hvac">HVAC</option>
+                            <option value="civil">Civil & Fit-out</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sub Services</label>
+                        <div class="chips-group">
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="subServices" value="inspection">
+                                <span>Site Inspection</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="subServices" value="replacement">
+                                <span>Equipment Replacement</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="subServices" value="calibration">
+                                <span>Device Calibration</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="subServices" value="cleaning">
+                                <span>Cleaning & Maintenance</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Do you require a female engineer?</label>
+                        <div class="chips-group">
+                            <label class="chip-toggle">
+                                <input type="radio" name="femaleEngineer" value="yes">
+                                <span>Yes</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="radio" name="femaleEngineer" value="no" checked>
+                                <span>No</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Notes for the Crew</label>
+                        <textarea name="serviceNotes" placeholder="Share any extra requirements or site preparation notes"></textarea>
+                    </div>
+                    <div class="step-footer">
+                        <button type="button" data-prev>Back</button>
+                        <button type="button" data-next>Next</button>
+                    </div>
+                </section>
+
+                <!-- Tools -->
+                <section class="tab-panel" id="tab-tools">
+                    <h2 class="section-title">Tools & Attachments</h2>
+                    <div class="form-group">
+                        <label>Required Tools</label>
+                        <div class="chips-group">
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="tools" value="ladder">
+                                <span>Telescopic Ladder</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="tools" value="drill">
+                                <span>Power Drill</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="tools" value="tester">
+                                <span>Electrical Tester</span>
+                            </label>
+                            <label class="chip-toggle">
+                                <input type="checkbox" name="tools" value="pressure">
+                                <span>Water Pressure Kit</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Attach Photos or Files</label>
+                        <input type="file" name="attachments" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label>On-site Contact Number</label>
+                        <input type="tel" name="contactPhone" placeholder="+962 7X XXX XXXX">
+                    </div>
+                    <div class="step-footer">
+                        <button type="button" data-prev>Back</button>
+                        <button type="button" data-next>Next</button>
+                    </div>
+                </section>
+
+                <!-- Confirm -->
+                <section class="tab-panel" id="tab-confirm">
+                    <h2 class="section-title">Review Summary</h2>
+                    <div class="summary-card">
+                        <div class="summary-item">
+                            <span>Ticket Type:</span>
+                            <strong id="summaryType">—</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>Schedule:</span>
+                            <strong id="summarySchedule">—</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>Main Service:</span>
+                            <strong id="summaryService">—</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span># of Sub Services:</span>
+                            <strong id="summarySubs">—</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>Tools:</span>
+                            <strong id="summaryTools">—</strong>
+                        </div>
+                    </div>
+
+                    <div class="confirmation-banner">
+                        ✅ Please make sure the information below is correct before you submit. You can jump back to any tab to adjust details.
+                    </div>
+
+                    <label class="confirmation-checkbox">
+                        <input type="checkbox" id="confirmCheckbox">
+                        <span>I confirm that I have reviewed the details and want to create this ticket.</span>
+                    </label>
+
+                    <div class="actions">
+                        <button type="button" class="btn-primary confirm" id="submitTicket" disabled>Create Ticket</button>
+                        <button type="button" class="btn-primary btn-outline" data-prev>Back to edit</button>
+                    </div>
+                </section>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        const tabButtons = document.querySelectorAll('#tabBar button');
+        const panels = document.querySelectorAll('.tab-panel');
+        const formEl = document.getElementById('mobileTicketForm');
+        const confirmCheckbox = document.getElementById('confirmCheckbox');
+        const submitBtn = document.getElementById('submitTicket');
+
+        let currentTab = 'customer';
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            tabButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+            panels.forEach(panel => {
+                panel.classList.toggle('active', panel.id === `tab-${tabName}`);
+            });
+            if (tabName === 'confirm') {
+                hydrateSummary();
+            }
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        formEl.addEventListener('click', (event) => {
+            const nextBtn = event.target.closest('[data-next]');
+            const prevBtn = event.target.closest('[data-prev]');
+            if (nextBtn) {
+                moveStep(1);
+            } else if (prevBtn) {
+                moveStep(-1);
+            }
+        });
+
+        const tabsOrder = Array.from(tabButtons).map(btn => btn.dataset.tab);
+
+        function moveStep(direction) {
+            const currentIndex = tabsOrder.indexOf(currentTab);
+            let nextIndex = currentIndex + direction;
+            nextIndex = Math.min(Math.max(nextIndex, 0), tabsOrder.length - 1);
+            switchTab(tabsOrder[nextIndex]);
+        }
+
+        function hydrateSummary() {
+            const type = formEl.ticketType.value ? formEl.ticketType.value : '—';
+            const typeLabel = type === 'corrective' ? 'Corrective' :
+                type === 'preventive' ? 'Preventive' :
+                type === 'emergency' ? 'Emergency' : '—';
+            document.getElementById('summaryType').textContent = typeLabel;
+
+            const date = formEl.ticketDate.value || '—';
+            const slot = formEl.ticketSlot.value || '—';
+            document.getElementById('summarySchedule').textContent = `${date} / ${slot}`;
+
+            const mainServiceSelect = formEl.mainService;
+            const mainServiceText = mainServiceSelect.value
+                ? mainServiceSelect.options[mainServiceSelect.selectedIndex].text
+                : '—';
+            document.getElementById('summaryService').textContent = mainServiceText;
+
+            const subServices = Array.from(formEl.querySelectorAll('input[name="subServices"]:checked')).length;
+            document.getElementById('summarySubs').textContent = subServices > 0 ? subServices : 'None';
+
+            const tools = Array.from(formEl.querySelectorAll('input[name="tools"]:checked'))
+                .map(item => ({
+                    ladder: 'Ladder',
+                    drill: 'Drill',
+                    tester: 'Tester',
+                    pressure: 'Pressure Kit'
+                }[item.value] || item.value));
+            document.getElementById('summaryTools').textContent = tools.length ? tools.join(', ') : 'None';
+        }
+
+        confirmCheckbox.addEventListener('change', (event) => {
+            submitBtn.disabled = !event.target.checked;
+        });
+
+        submitBtn.addEventListener('click', () => {
+            submitBtn.textContent = 'Creating ticket...';
+            submitBtn.disabled = true;
+            setTimeout(() => {
+                alert('Ticket created successfully 🎉');
+                submitBtn.textContent = 'Create Ticket';
+                submitBtn.disabled = false;
+                confirmCheckbox.checked = false;
+                switchTab('customer');
+                formEl.reset();
+                hydrateSummary();
+            }, 1300);
+        });
+    </script>
+</body>
+</html>
+

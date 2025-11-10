@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeFix Platform - Roles</title>
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #32281d 0%, #E67E00 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #FCD34D;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 5px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: #FCD34D;
+        }
+
+        .menu-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: #FCD34D;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .submenu {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .submenu.open {
+            max-height: 200px;
+        }
+
+        .submenu-item {
+            padding-left: 52px;
+        }
+
+        .submenu-link {
+            display: block;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .submenu-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding-left: 25px;
+        }
+
+        .submenu-link.active {
+            color: #FCD34D;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            width: calc(100% - 260px);
+            max-width: calc(100% - 260px);
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 100%;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #E67E00;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 143, 30, 0.4);
+        }
+
+        /* Content Area */
+        .content-area {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #F78F1E;
+            box-shadow: 0 0 0 3px rgba(247, 143, 30, 0.1);
+        }
+
+        /* Grid View Styles */
+        .grid-container {
+            overflow-x: hidden;
+            overflow-y: visible;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            width: 100%;
+            max-width: 100%;
+        }
+
+
+        /* Ensure all columns are visible */
+        .grid-container > div {
+            min-width: 2010px;
+        }
+
+        /* Grid content scrolling */
+        #permissionsGrid {
+            overflow-x: auto;
+            overflow-y: visible;
+        }
+
+        #permissionsGrid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        #permissionsGrid::-webkit-scrollbar-track {
+            background: #fef3e2;
+            border-radius: 4px;
+        }
+
+        #permissionsGrid::-webkit-scrollbar-thumb {
+            background: #F78F1E;
+            border-radius: 4px;
+        }
+
+        #permissionsGrid::-webkit-scrollbar-thumb:hover {
+            background: #E67E00;
+        }
+
+
+        /* Toggle Switch Styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #F78F1E;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Force horizontal scroll */
+        .grid-container {
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        .grid-header,
+        .grid-row {
+            display: inline-grid;
+            white-space: normal;
+        }
+
+        .grid-header {
+            display: grid;
+            grid-template-columns: 80px 150px 120px 100px 120px 140px 140px 160px 160px 150px 150px 150px 150px 150px;
+            gap: 8px;
+            padding: 15px 12px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #E67E00;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            min-width: 2010px;
+            width: max-content;
+        }
+
+        .grid-header-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .grid-header-cell:hover {
+            color: #F78F1E;
+        }
+
+        .grid-header-cell > span {
+            white-space: nowrap;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 80px 150px 120px 100px 120px 140px 140px 160px 160px 150px 150px 150px 150px 150px;
+            gap: 8px;
+            padding: 15px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            min-width: 2010px;
+            width: max-content;
+        }
+
+        .grid-row:hover {
+            background-color: #f8fafc;
+        }
+
+        .grid-cell {
+            display: flex;
+            align-items: center;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .permission-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .permission-yes {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .permission-no {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            font-size: 22px;
+            color: #E67E00;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-group-required::after {
+            content: ' *';
+            color: #EF4444;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #F78F1E;
+            box-shadow: 0 0 0 3px rgba(247, 143, 30, 0.1);
+        }
+
+        .form-group-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 143, 30, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .results-count {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .pagination-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #F78F1E;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #F78F1E 0%, #E67E00 100%);
+            color: white;
+            border-color: #F78F1E;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .grid-container {
+                overflow-x: hidden;
+            }
+            
+            .grid-header,
+            .grid-row {
+                min-width: 2010px;
+                width: max-content;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                max-width: 100%;
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .grid-container {
+                overflow-x: hidden;
+            }
+            
+            .grid-header,
+            .grid-row {
+                min-width: 2010px;
+                width: max-content;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .pagination-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>We<span>Fix</span></h1>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link">
+                        <span class="menu-icon">🏠</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="alert('Calendar feature coming soon!')">
+                        <span class="menu-icon">📅</span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="tickets.html" class="menu-link">
+                        <span class="menu-icon">🎫</span>
+                        <span>Tickets</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link customers-link">
+                        <span class="menu-icon">👥</span>
+                        <span>Customers</span>
+                    </a>
+                    <ul class="submenu open" id="customersSubmenu">
+                        <li class="submenu-item">
+                            <a href="companies.html" class="submenu-link">Companies</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="individuals.html" class="submenu-link">Individuals</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="contracts.html" class="menu-link">
+                        <span class="menu-icon">📋</span>
+                        <span>Contracts</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="permissions.html" class="menu-link active">
+                        <span class="menu-icon">🔐</span>
+                        <span>Roles</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./login.html" class="menu-link" onclick="console.log('Login link clicked'); return true;">
+                        <span class="menu-icon">🚪</span>
+                        <span>Login</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h2>Roles</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-add" onclick="openAddPermissionModal()">
+                        <span>➕</span>
+                        Add New Role
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Search Section -->
+                <div class="search-section">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search all roles..." oninput="filterPermissions()">
+                </div>
+
+                <!-- Results Count -->
+                <div class="results-count" id="resultsCount">Showing 0 results</div>
+
+                <!-- Grid View -->
+                <div class="grid-container">
+                    <div class="grid-header">
+                        <div class="grid-header-cell">
+                            <span>Edit</span>
+                        </div>
+                        <div class="grid-header-cell">
+                            <span>Company Name</span>
+                        </div>
+                        <div class="grid-header-cell">User Name</div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>Create Ticket</span>
+                                <select class="form-input" id="createTicketFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>Assign To Technician</span>
+                                <select class="form-input" id="assignToTechFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>View Ticket Pending</span>
+                                <select class="form-input" id="viewTicketPendingFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>Edit Ticket Pending</span>
+                                <select class="form-input" id="editTicketPendingFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>View Ticket Rescheduling</span>
+                                <select class="form-input" id="viewTicketReschedulingFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>Edit Ticket Rescheduling</span>
+                                <select class="form-input" id="editTicketReschedulingFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>View Ticket Completed</span>
+                                <select class="form-input" id="viewTicketCompletedFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>View Ticket Closed</span>
+                                <select class="form-input" id="viewTicketClosedFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>Top Notifications</span>
+                                <select class="form-input" id="topNotificationsFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <span>SMS</span>
+                                <select class="form-input" id="smsFilter" onchange="filterPermissions()" style="padding: 8px; font-size: 12px;">
+                                    <option value="">All</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-header-cell">Branches Name</div>
+                    </div>
+                    <div id="permissionsGrid"></div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer" style="display: none;">
+                    <div class="pagination-info" id="paginationInfo">Showing 0 - 0 of 0</div>
+                    <div class="pagination-controls" id="paginationControls"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Role Modal -->
+    <div class="modal-overlay" id="addPermissionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Role</h3>
+                <button class="close-btn" onclick="closeAddPermissionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addPermissionForm">
+                    <div class="form-group">
+                        <label class="form-label form-group-required">Company Name</label>
+                        <select class="form-select" id="permissionCompany" required>
+                            <option value="">Select Company</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label form-group-required">User Name</label>
+                        <select class="form-select" id="permissionUserName" required>
+                            <option value="">Select User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Roles</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionCreateTicket" value="true">
+                                <span>Create Ticket</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionViewTicketPending" value="true">
+                                <span>View Ticket Pending</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionEditTicketPending" value="true">
+                                <span>Edit Ticket Pending</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionViewTicketRescheduling" value="true">
+                                <span>View Ticket Rescheduling</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionEditTicketRescheduling" value="true">
+                                <span>Edit Ticket Rescheduling</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionViewTicketCompleted" value="true">
+                                <span>View Ticket Completed</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionViewTicketClosed" value="true">
+                                <span>View Ticket Closed</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionAssignTech" value="true">
+                                <span>Assign To Technician</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notifications</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionTopNotifications" value="true">
+                                <span>Allow Receive Top Notifications</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="permissionSMS" value="true">
+                                <span>Allow Receive SMS</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Branches Name</label>
+                        <div class="checkbox-group" id="branchesCheckboxGroup" style="max-height: 150px; overflow-y: auto; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px;">
+                            <!-- Branches will be populated here -->
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeAddPermissionModal()">Cancel</button>
+                    <button type="button" class="btn-primary" onclick="savePermission()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Role Modal -->
+    <div class="modal-overlay" id="editPermissionModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Edit Role</h3>
+                <button class="close-btn" onclick="closeEditPermissionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editPermissionForm">
+                    <div class="form-group">
+                        <label class="form-label">Company Name</label>
+                        <select class="form-select" id="editPermissionCompany" required>
+                            <option value="">Select Company</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">User Name</label>
+                        <select class="form-select" id="editPermissionUser" required>
+                            <option value="">Select User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Roles</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionCreateTicket" value="true">
+                                <span>Create Ticket</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionViewTicketPending" value="true">
+                                <span>View Ticket Pending</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionEditTicketPending" value="true">
+                                <span>Edit Ticket Pending</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionViewTicketRescheduling" value="true">
+                                <span>View Ticket Rescheduling</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionEditTicketRescheduling" value="true">
+                                <span>Edit Ticket Rescheduling</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionViewTicketCompleted" value="true">
+                                <span>View Ticket Completed</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionViewTicketClosed" value="true">
+                                <span>View Ticket Closed</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionAssignTech" value="true">
+                                <span>Assign To Technician</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notifications</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionTopNotifications" value="true">
+                                <span>Allow Receive Top Notifications</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="editPermissionSMS" value="true">
+                                <span>Allow Receive SMS</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Branches Name</label>
+                        <div class="checkbox-group" id="editBranchesCheckboxGroup" style="max-height: 150px; overflow-y: auto; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px;">
+                            <!-- Branches will be populated here -->
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeEditPermissionModal()">Cancel</button>
+                    <button type="button" class="btn-primary" onclick="saveEditPermission()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Sample data
+        let permissions = [];
+        let companies = [];
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        let filteredPermissions = null;
+
+        // Load companies from localStorage or use sample data
+        function loadCompanies() {
+            const stored = localStorage.getItem('companies');
+            if (stored) {
+                companies = JSON.parse(stored);
+            } else {
+                // Sample companies
+                companies = [
+                    { 
+                        id: '1', 
+                        title: 'TechCorp Solutions',
+                        users: [
+                            'Ahmed Mohamed', 'Sara Ali', 'Omar Hassan', 'Fatima Khalil', 'Mohamed Ibrahim'
+                        ]
+                    },
+                    { 
+                        id: '2', 
+                        title: 'Global Industries',
+                        users: [
+                            'John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'
+                        ]
+                    },
+                    { 
+                        id: '3', 
+                        title: 'Modern Enterprises',
+                        users: [
+                            'Lisa Davis', 'Robert Miller', 'Jennifer Garcia', 'William Martinez', 'Linda Rodriguez'
+                        ]
+                    },
+                    { 
+                        id: '4', 
+                        title: 'Prime Services',
+                        users: [
+                            'Aisha Mahmoud', 'Khalid Ahmed', 'Nour El-Din', 'Youssef Mostafa', 'Mariam Farouk'
+                        ]
+                    },
+                    { 
+                        id: '5', 
+                        title: 'Elite Business Group',
+                        users: [
+                            'Christopher Garcia', 'Amanda Martinez', 'Daniel Robinson', 'Ashley Clark', 'Matthew Rodriguez'
+                        ]
+                    }
+                ];
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCompanies();
+            loadPermissions();
+            populateCompanyDropdown();
+            displayPermissions();
+            setupScrollSync();
+            
+            // Add event listener for company change in edit modal
+            document.getElementById('editPermissionCompany').addEventListener('change', function() {
+                populateEditUsers(this.value);
+            });
+            
+            // Toggle Customers submenu
+            const customersLink = document.querySelector('.customers-link');
+            const customersSubmenu = document.getElementById('customersSubmenu');
+
+            if (customersLink && customersSubmenu) {
+                customersLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    customersSubmenu.classList.toggle('open');
+                });
+            }
+        });
+
+        // Load permissions from localStorage
+        function loadPermissions() {
+            const stored = localStorage.getItem('permissions');
+            if (stored) {
+                permissions = JSON.parse(stored);
+            } else {
+                // Generate 30 sample permissions
+                permissions = generateSamplePermissions();
+                savePermissions();
+            }
+        }
+
+        // Generate 30 sample permissions
+        function generateSamplePermissions() {
+            const sampleCompanies = [
+                'TechCorp Solutions', 'Global Industries', 'Modern Enterprises', 'Prime Services', 'Elite Business Group',
+                'Advanced Systems', 'Dynamic Solutions', 'Innovation Corp', 'Future Tech', 'Smart Business',
+                'Digital Ventures', 'Core Systems', 'Alpha Industries', 'Beta Corp', 'Gamma Solutions',
+                'Delta Tech', 'Omega Group', 'Phoenix Co', 'Apex Industries', 'Summit Corp'
+            ];
+
+            const sampleUsers = [
+                'John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown',
+                'Lisa Davis', 'Robert Miller', 'Jennifer Garcia', 'William Martinez', 'Linda Rodriguez',
+                'James Anderson', 'Patricia Taylor', 'Michael Thomas', 'Barbara Jackson', 'Richard White',
+                'Susan Harris', 'Joseph Martin', 'Jessica Thompson', 'Christopher Garcia', 'Amanda Martinez',
+                'Daniel Robinson', 'Ashley Clark', 'Matthew Rodriguez', 'Stephanie Lewis', 'Andrew Lee',
+                'Nicole Walker', 'Joshua Hall', 'Heather Allen', 'Ryan Young', 'Samantha King'
+            ];
+
+            const userTypes = ['Owner (Admin)', 'Team Leader'];
+            const branchNames = [
+                'Main Branch', 'Branch 1', 'Branch 2', 'Branch 3', 'North Branch', 'South Branch',
+                'East Branch', 'West Branch', 'Central Branch', 'Downtown Branch'
+            ];
+
+            const permissions = [];
+
+            for (let i = 1; i <= 30; i++) {
+                const companyIndex = Math.floor(Math.random() * sampleCompanies.length);
+                const userIndex = Math.floor(Math.random() * sampleUsers.length);
+                const userType = userTypes[Math.floor(Math.random() * userTypes.length)];
+                const isActive = Math.random() > 0.2; // 80% active
+                const createTicket = Math.random() > 0.2; // 80% can create tickets
+                const assignToTech = Math.random() > 0.4; // 60% can assign to tech
+                const viewTicketPending = Math.random() > 0.3; // 70% can view pending tickets
+                const editTicketPending = Math.random() > 0.4; // 60% can edit pending tickets
+                const viewTicketRescheduling = Math.random() > 0.3; // 70% can view rescheduling tickets
+                const editTicketRescheduling = Math.random() > 0.4; // 60% can edit rescheduling tickets
+                const viewTicketCompleted = Math.random() > 0.2; // 80% can view completed tickets
+                const viewTicketClosed = Math.random() > 0.2; // 80% can view closed tickets
+                const topNotifications = Math.random() > 0.3; // 70% receive top notifications
+                const sms = Math.random() > 0.2; // 80% receive SMS
+                const pushNotification = Math.random() > 0.3; // 70% receive push notifications
+
+                // Generate random branches (1-3 branches per user)
+                const numBranches = Math.floor(Math.random() * 3) + 1;
+                const selectedBranches = [];
+                for (let j = 0; j < numBranches; j++) {
+                    const branch = branchNames[Math.floor(Math.random() * branchNames.length)];
+                    if (!selectedBranches.includes(branch)) {
+                        selectedBranches.push(branch);
+                    }
+                }
+
+                permissions.push({
+                    id: i.toString(),
+                    companyId: (companyIndex + 1).toString(),
+                    companyName: sampleCompanies[companyIndex],
+                    userName: sampleUsers[userIndex],
+                    userType: userType,
+                    isActive: isActive,
+                    createTicket: createTicket,
+                    assignToTech: assignToTech,
+                    branchesName: selectedBranches.join(', '),
+                    viewTicketPending: viewTicketPending,
+                    editTicketPending: editTicketPending,
+                    viewTicketRescheduling: viewTicketRescheduling,
+                    editTicketRescheduling: editTicketRescheduling,
+                    viewTicketCompleted: viewTicketCompleted,
+                    viewTicketClosed: viewTicketClosed,
+                    topNotifications: topNotifications,
+                    sms: sms,
+                });
+            }
+
+            return permissions;
+        }
+
+        // Save permissions to localStorage
+        function savePermissions() {
+            localStorage.setItem('permissions', JSON.stringify(permissions));
+        }
+
+
+
+        // Filter permissions
+        function filterPermissions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const createTicketFilter = document.getElementById('createTicketFilter').value;
+            const assignToTechFilter = document.getElementById('assignToTechFilter').value;
+            const viewTicketPendingFilter = document.getElementById('viewTicketPendingFilter').value;
+            const editTicketPendingFilter = document.getElementById('editTicketPendingFilter').value;
+            const viewTicketReschedulingFilter = document.getElementById('viewTicketReschedulingFilter').value;
+            const editTicketReschedulingFilter = document.getElementById('editTicketReschedulingFilter').value;
+            const viewTicketCompletedFilter = document.getElementById('viewTicketCompletedFilter').value;
+            const viewTicketClosedFilter = document.getElementById('viewTicketClosedFilter').value;
+            const topNotificationsFilter = document.getElementById('topNotificationsFilter').value;
+            const smsFilter = document.getElementById('smsFilter').value;
+
+            filteredPermissions = permissions.filter(p => {
+                const matchesSearch = 
+                    p.companyName.toLowerCase().includes(searchTerm) ||
+                    p.userName.toLowerCase().includes(searchTerm) ||
+                    p.userType.toLowerCase().includes(searchTerm) ||
+                    p.branchesName.toLowerCase().includes(searchTerm);
+                
+                const matchesCreateTicket = createTicketFilter === '' || p.createTicket.toString() === createTicketFilter;
+                const matchesAssignToTech = assignToTechFilter === '' || p.assignToTech.toString() === assignToTechFilter;
+                const matchesViewTicketPending = viewTicketPendingFilter === '' || p.viewTicketPending.toString() === viewTicketPendingFilter;
+                const matchesEditTicketPending = editTicketPendingFilter === '' || p.editTicketPending.toString() === editTicketPendingFilter;
+                const matchesViewTicketRescheduling = viewTicketReschedulingFilter === '' || p.viewTicketRescheduling.toString() === viewTicketReschedulingFilter;
+                const matchesEditTicketRescheduling = editTicketReschedulingFilter === '' || p.editTicketRescheduling.toString() === editTicketReschedulingFilter;
+                const matchesViewTicketCompleted = viewTicketCompletedFilter === '' || p.viewTicketCompleted.toString() === viewTicketCompletedFilter;
+                const matchesViewTicketClosed = viewTicketClosedFilter === '' || p.viewTicketClosed.toString() === viewTicketClosedFilter;
+                const matchesTopNotifications = topNotificationsFilter === '' || p.topNotifications.toString() === topNotificationsFilter;
+                const matchesSMS = smsFilter === '' || p.sms.toString() === smsFilter;
+
+                return matchesSearch && matchesCreateTicket && matchesAssignToTech && 
+                       matchesViewTicketPending && matchesEditTicketPending && matchesViewTicketRescheduling && 
+                       matchesEditTicketRescheduling && matchesViewTicketCompleted && matchesViewTicketClosed &&
+                       matchesTopNotifications && matchesSMS;
+            });
+
+            currentPage = 1; // Reset to first page when filtering
+            displayPermissions();
+        }
+
+        // Display permissions
+        function displayPermissions() {
+            const grid = document.getElementById('permissionsGrid');
+            const paginationContainer = document.getElementById('paginationContainer');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            // Use filtered permissions if available, otherwise use all permissions
+            const data = filteredPermissions !== null ? filteredPermissions : permissions;
+            const totalItems = data.length;
+
+            resultsCount.textContent = `Showing ${totalItems} results`;
+
+            if (totalItems === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔐</div>
+                        <h3>No permissions found</h3>
+                        <p>Try adjusting your filters or add a new permission</p>
+                    </div>
+                `;
+                paginationContainer.style.display = 'none';
+                return;
+            }
+
+            // Calculate pagination
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const paginatedData = data.slice(startIndex, endIndex);
+
+            // Display paginated data
+            grid.innerHTML = paginatedData.map((permission, index) => `
+                <div class="grid-row">
+                    <div class="grid-cell" style="display: flex; justify-content: center; align-items: center;">
+                        <button class="btn-edit" onclick="editPermission(${startIndex + index})" title="Edit Role" style="background: #3B82F6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.3s ease;" onmouseover="this.style.background='#2563EB'" onmouseout="this.style.background='#3B82F6'">Edit</button>
+                    </div>
+                    <div class="grid-cell" title="${permission.companyName}">${permission.companyName}</div>
+                    <div class="grid-cell" title="${permission.userName}">${permission.userName}</div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.createTicket ? 'permission-yes' : 'permission-no'}" title="${permission.createTicket ? 'Can create tickets' : 'Cannot create tickets'}">
+                            ${permission.createTicket ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.assignToTech ? 'permission-yes' : 'permission-no'}" title="${permission.assignToTech ? 'Can assign to technicians' : 'Cannot assign to technicians'}">
+                            ${permission.assignToTech ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.viewTicketPending ? 'permission-yes' : 'permission-no'}" title="${permission.viewTicketPending ? 'Can view pending tickets' : 'Cannot view pending tickets'}">
+                            ${permission.viewTicketPending ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.editTicketPending ? 'permission-yes' : 'permission-no'}" title="${permission.editTicketPending ? 'Can edit pending tickets' : 'Cannot edit pending tickets'}">
+                            ${permission.editTicketPending ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.viewTicketRescheduling ? 'permission-yes' : 'permission-no'}" title="${permission.viewTicketRescheduling ? 'Can view rescheduling tickets' : 'Cannot view rescheduling tickets'}">
+                            ${permission.viewTicketRescheduling ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.editTicketRescheduling ? 'permission-yes' : 'permission-no'}" title="${permission.editTicketRescheduling ? 'Can edit rescheduling tickets' : 'Cannot edit rescheduling tickets'}">
+                            ${permission.editTicketRescheduling ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.viewTicketCompleted ? 'permission-yes' : 'permission-no'}" title="${permission.viewTicketCompleted ? 'Can view completed tickets' : 'Cannot view completed tickets'}">
+                            ${permission.viewTicketCompleted ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.viewTicketClosed ? 'permission-yes' : 'permission-no'}" title="${permission.viewTicketClosed ? 'Can view closed tickets' : 'Cannot view closed tickets'}">
+                            ${permission.viewTicketClosed ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.topNotifications ? 'permission-yes' : 'permission-no'}" title="${permission.topNotifications ? 'Receives top notifications' : 'No top notifications'}">
+                            ${permission.topNotifications ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell">
+                        <span class="permission-badge ${permission.sms ? 'permission-yes' : 'permission-no'}" title="${permission.sms ? 'Receives SMS notifications' : 'No SMS notifications'}">
+                            ${permission.sms ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="grid-cell" title="${permission.branchesName || 'No branches assigned'}">${permission.branchesName || 'N/A'}</div>
+                </div>
+            `).join('');
+
+            // Update pagination info
+            paginationInfo.textContent = `Showing ${startIndex + 1} - ${endIndex} of ${totalItems}`;
+
+            // Show pagination controls
+            paginationContainer.style.display = 'flex';
+            
+            // Render pagination buttons
+            renderPagination(totalPages);
+            
+        }
+
+        // Render pagination buttons
+        function renderPagination(totalPages) {
+            const paginationControls = document.getElementById('paginationControls');
+            
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                return;
+            }
+
+            let buttonsHTML = '';
+
+            // Previous button
+            buttonsHTML += `
+                <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    Previous
+                </button>
+            `;
+
+            // Page number buttons
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            if (startPage > 1) {
+                buttonsHTML += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    buttonsHTML += `<span style="padding: 8px 4px;">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                buttonsHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    buttonsHTML += `<span style="padding: 8px 4px;">...</span>`;
+                }
+                buttonsHTML += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // Next button
+            buttonsHTML += `
+                <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next
+                </button>
+            `;
+
+            paginationControls.innerHTML = buttonsHTML;
+        }
+
+        // Go to specific page
+        function goToPage(page) {
+            const data = filteredPermissions !== null ? filteredPermissions : permissions;
+            const totalPages = Math.ceil(data.length / itemsPerPage);
+            
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayPermissions();
+            }
+        }
+
+        // Setup scroll synchronization (removed top scrollbar)
+        function setupScrollSync() {
+            // Top scrollbar functionality removed - using standard bottom scrollbar
+        }
+
+
+        // Open add permission modal
+        function openAddPermissionModal() {
+            document.getElementById('addPermissionModal').classList.add('active');
+            populateCompanyDropdown();
+            populateBranchesCheckboxes();
+            populateUserDropdown();
+            
+            // Remove existing event listener if any
+            const companySelect = document.getElementById('permissionCompany');
+            const newCompanySelect = companySelect.cloneNode(true);
+            companySelect.parentNode.replaceChild(newCompanySelect, companySelect);
+            
+            // Add event listener for company change
+            document.getElementById('permissionCompany').addEventListener('change', function() {
+                updateUsersAndBranches(this.value);
+            });
+        }
+
+        // Update users and branches based on selected company
+        function updateUsersAndBranches(companyId) {
+            const userSelect = document.getElementById('permissionUserName');
+            // Removed branchSelect as it doesn't exist in the HTML
+            
+            // Clear previous options
+            userSelect.innerHTML = '<option value="">Select User</option>';
+            // Removed branchSelect reference
+            
+            if (!companyId) return;
+            
+            // Find the selected company
+            const selectedCompany = companies.find(company => company.id === companyId);
+            
+            if (selectedCompany && selectedCompany.users) {
+                // Add company-specific users
+                selectedCompany.users.forEach(userName => {
+                    const option = document.createElement('option');
+                    option.value = userName;
+                    option.textContent = userName;
+                    userSelect.appendChild(option);
+                });
+            } else {
+                // Add sample users for the selected company
+                const sampleUsers = [
+                    'Ahmed Mohamed', 'Sara Ali', 'Omar Hassan', 'Fatima Khalil', 'Mohamed Ibrahim',
+                    'John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown',
+                    'Lisa Davis', 'Robert Miller', 'Jennifer Garcia', 'William Martinez', 'Linda Rodriguez',
+                    'James Anderson', 'Patricia Taylor', 'Michael Thomas', 'Barbara Jackson', 'Richard White',
+                    'Susan Harris', 'Joseph Martin', 'Jessica Thompson', 'Christopher Garcia', 'Amanda Martinez',
+                    'Daniel Robinson', 'Ashley Clark', 'Matthew Rodriguez', 'Stephanie Lewis', 'Andrew Lee'
+                ];
+                
+                sampleUsers.forEach(userName => {
+                    const option = document.createElement('option');
+                    option.value = userName;
+                    option.textContent = userName;
+                    userSelect.appendChild(option);
+                });
+            }
+            
+            // Load company data from localStorage
+            const stored = localStorage.getItem('companies');
+            if (stored) {
+                const allCompanies = JSON.parse(stored);
+                const company = allCompanies.find(c => c.id === companyId);
+                
+                if (company) {
+                    // Populate users
+                    if (company.teamLeaders && company.teamLeaders.length > 0) {
+                        company.teamLeaders.forEach(tl => {
+                            const option = document.createElement('option');
+                            option.value = tl.nameEn || tl.name || 'Unknown';
+                            option.textContent = `${tl.nameEn || tl.name || 'Unknown'} (${tl.userType || 'Team Leader'})`;
+                            userSelect.appendChild(option);
+                        });
+                    }
+                    
+                    // Add company owner/admin if exists
+                    if (company.owner) {
+                        const option = document.createElement('option');
+                        option.value = company.owner.nameEn || company.owner.name || 'Owner';
+                        option.textContent = `${company.owner.nameEn || company.owner.name || 'Owner'} (Owner)`;
+                        userSelect.appendChild(option);
+                    }
+                    
+                    // Populate branches
+                    if (company.branches && Array.isArray(company.branches)) {
+                        company.branches.forEach(branch => {
+                            const option = document.createElement('option');
+                            option.value = branch.id || branch.title || branch.nameEn || 'Branch';
+                            option.textContent = branch.title || branch.nameEn || branch.nameAr || 'Branch';
+                            // Removed branchSelect reference
+                        });
+                    } else if (company.branches && typeof company.branches === 'number') {
+                        // If branches is just a number, create sample branches
+                        for (let i = 1; i <= company.branches; i++) {
+                            const option = document.createElement('option');
+                            option.value = `branch_${i}`;
+                            option.textContent = `Branch ${i}`;
+                            // Removed branchSelect reference
+                        }
+                    }
+                }
+            }
+            
+            // Fallback: Add sample data if no company data found
+            if (userSelect.options.length === 1) {
+                const sampleUsers = ['John Doe', 'Jane Smith', 'Mike Johnson'];
+                sampleUsers.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user;
+                    option.textContent = user;
+                    userSelect.appendChild(option);
+                });
+            }
+            
+            // Removed branchSelect logic as it's not needed
+        }
+
+        // Close add permission modal
+        function closeAddPermissionModal() {
+            document.getElementById('addPermissionModal').classList.remove('active');
+            document.getElementById('addPermissionForm').reset();
+        }
+
+        // Edit permission
+        function editPermission(index) {
+            const dataToUse = filteredPermissions || permissions;
+            const permission = dataToUse[index];
+            if (!permission) return;
+
+            console.log('Editing permission:', permission);
+
+            // Populate company dropdown first
+            populateEditCompanyDropdown();
+            
+            // Set company and populate users
+            setTimeout(() => {
+                document.getElementById('editPermissionCompany').value = permission.companyName;
+                populateEditUsers(permission.companyName);
+                
+                // Set user after a short delay to ensure dropdown is populated
+                setTimeout(() => {
+                    document.getElementById('editPermissionUser').value = permission.userName;
+                }, 100);
+            }, 100);
+            
+            
+            // Set permissions
+            document.getElementById('editPermissionCreateTicket').checked = permission.createTicket || false;
+            document.getElementById('editPermissionViewTicketPending').checked = permission.viewTicketPending || false;
+            document.getElementById('editPermissionEditTicketPending').checked = permission.editTicketPending || false;
+            document.getElementById('editPermissionViewTicketRescheduling').checked = permission.viewTicketRescheduling || false;
+            document.getElementById('editPermissionEditTicketRescheduling').checked = permission.editTicketRescheduling || false;
+            document.getElementById('editPermissionViewTicketCompleted').checked = permission.viewTicketCompleted || false;
+            document.getElementById('editPermissionViewTicketClosed').checked = permission.viewTicketClosed || false;
+            document.getElementById('editPermissionAssignTech').checked = permission.assignToTech || false;
+            
+            // Set notifications
+            document.getElementById('editPermissionTopNotifications').checked = permission.topNotifications || false;
+            document.getElementById('editPermissionSMS').checked = permission.sms || false;
+            
+            // Set branches
+            const selectedBranches = permission.branchesName ? permission.branchesName.split(', ') : [];
+            populateEditBranchesCheckboxes(selectedBranches);
+            
+            // Store current index for saving
+            document.getElementById('editPermissionModal').setAttribute('data-index', index);
+            
+            // Open modal
+            document.getElementById('editPermissionModal').classList.add('active');
+        }
+
+        // Close edit permission modal
+        function closeEditPermissionModal() {
+            document.getElementById('editPermissionModal').classList.remove('active');
+            document.getElementById('editPermissionForm').reset();
+        }
+
+        // Populate edit company dropdown
+        function populateEditCompanyDropdown() {
+            const companySelect = document.getElementById('editPermissionCompany');
+            companySelect.innerHTML = '<option value="">Select Company</option>';
+            
+            companies.forEach(company => {
+                const option = document.createElement('option');
+                option.value = company.title;
+                option.textContent = company.title;
+                companySelect.appendChild(option);
+            });
+        }
+
+        // Populate edit users based on company
+        function populateEditUsers(companyName) {
+            const userSelect = document.getElementById('editPermissionUser');
+            userSelect.innerHTML = '<option value="">Select User</option>';
+            
+            // Find the company by name
+            const selectedCompany = companies.find(company => company.title === companyName);
+            
+            if (selectedCompany && selectedCompany.users) {
+                // Add company-specific users
+                selectedCompany.users.forEach(userName => {
+                    const option = document.createElement('option');
+                    option.value = userName;
+                    option.textContent = userName;
+                    userSelect.appendChild(option);
+                });
+            } else {
+                // Fallback: Add generic sample users if company not found
+                const sampleUsers = [
+                    'Ahmed Mohamed', 'Sara Ali', 'Omar Hassan', 'Fatima Khalil', 'Mohamed Ibrahim',
+                    'John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'
+                ];
+                
+                sampleUsers.forEach(userName => {
+                    const option = document.createElement('option');
+                    option.value = userName;
+                    option.textContent = userName;
+                    userSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Populate edit branches checkboxes
+        function populateEditBranchesCheckboxes(selectedBranches) {
+            const container = document.getElementById('editBranchesCheckboxGroup');
+            const sampleBranches = ['Main Branch', 'Branch 1', 'Branch 2', 'Branch 3', 'North Branch', 'South Branch', 'East Branch', 'West Branch', 'Central Branch', 'Downtown Branch'];
+            
+            container.innerHTML = sampleBranches.map(branch => `
+                <label class="checkbox-item">
+                    <input type="checkbox" value="${branch}" name="editBranches" ${selectedBranches && selectedBranches.includes(branch) ? 'checked' : ''}>
+                    <span>${branch}</span>
+                </label>
+            `).join('');
+        }
+
+        // Save edit permission
+        function saveEditPermission() {
+            const index = document.getElementById('editPermissionModal').getAttribute('data-index');
+            if (index === null) return;
+
+            const companyName = document.getElementById('editPermissionCompany').value;
+            const userName = document.getElementById('editPermissionUser').value;
+
+            if (!companyName || !userName) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please fill in all required fields'
+                });
+                return;
+            }
+
+            // Get selected branches from checkboxes
+            const branchCheckboxes = document.querySelectorAll('#editBranchesCheckboxGroup input[type="checkbox"]:checked');
+            const branchesName = Array.from(branchCheckboxes).map(cb => cb.value).join(', ');
+
+            // Find the actual index in the main permissions array
+            const dataToUse = filteredPermissions || permissions;
+            const permissionToUpdate = dataToUse[index];
+            const actualIndex = permissions.findIndex(p => 
+                p.companyName === permissionToUpdate.companyName && 
+                p.userName === permissionToUpdate.userName
+            );
+
+            if (actualIndex === -1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Role not found'
+                });
+                return;
+            }
+
+            // Update permission
+            permissions[actualIndex] = {
+                ...permissions[actualIndex], // Keep existing properties
+                companyName,
+                userName,
+                userType: 'Team Leader', // Default user role
+                isActive: true, // Default to active
+                createTicket: document.getElementById('editPermissionCreateTicket').checked,
+                assignToTech: document.getElementById('editPermissionAssignTech').checked,
+                viewTicketPending: document.getElementById('editPermissionViewTicketPending').checked,
+                editTicketPending: document.getElementById('editPermissionEditTicketPending').checked,
+                viewTicketRescheduling: document.getElementById('editPermissionViewTicketRescheduling').checked,
+                editTicketRescheduling: document.getElementById('editPermissionEditTicketRescheduling').checked,
+                viewTicketCompleted: document.getElementById('editPermissionViewTicketCompleted').checked,
+                viewTicketClosed: document.getElementById('editPermissionViewTicketClosed').checked,
+                topNotifications: document.getElementById('editPermissionTopNotifications').checked,
+                sms: document.getElementById('editPermissionSMS').checked,
+                branchesName: branchesName
+            };
+
+            // Save to localStorage
+            localStorage.setItem('permissions', JSON.stringify(permissions));
+
+            // Close modal
+            closeEditPermissionModal();
+
+            // Refresh display
+            filteredPermissions = null;
+            currentPage = 1;
+            displayPermissions();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Role updated successfully!'
+            });
+        }
+
+        // Populate company dropdown
+        function populateCompanyDropdown() {
+            const select = document.getElementById('permissionCompany');
+            select.innerHTML = '<option value="">Select Company</option>' + 
+                companies.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+        }
+
+        // Populate branches checkboxes
+        function populateBranchesCheckboxes() {
+            const container = document.getElementById('branchesCheckboxGroup');
+            const sampleBranches = ['Main Branch', 'Branch 1', 'Branch 2', 'Branch 3', 'North Branch', 'South Branch', 'East Branch', 'West Branch', 'Central Branch', 'Downtown Branch'];
+            
+            container.innerHTML = sampleBranches.map(branch => `
+                <label class="checkbox-item">
+                    <input type="checkbox" value="${branch}">
+                    <span>${branch}</span>
+                </label>
+            `).join('');
+        }
+
+        // Initialize user dropdown (empty until company is selected)
+        function populateUserDropdown() {
+            const userSelect = document.getElementById('permissionUserName');
+            userSelect.innerHTML = '<option value="">Select User</option>';
+        }
+
+        // Save permission
+        function savePermission() {
+            const companyId = document.getElementById('permissionCompany').value;
+            const userName = document.getElementById('permissionUserName').value;
+            const createTicket = document.getElementById('permissionCreateTicket').checked;
+            const assignToTech = document.getElementById('permissionAssignTech').checked;
+            const viewTicketPending = document.getElementById('permissionViewTicketPending').checked;
+            const editTicketPending = document.getElementById('permissionEditTicketPending').checked;
+            const viewTicketRescheduling = document.getElementById('permissionViewTicketRescheduling').checked;
+            const editTicketRescheduling = document.getElementById('permissionEditTicketRescheduling').checked;
+            const viewTicketCompleted = document.getElementById('permissionViewTicketCompleted').checked;
+            const viewTicketClosed = document.getElementById('permissionViewTicketClosed').checked;
+            
+            // Get selected branches from checkboxes
+            const branchCheckboxes = document.querySelectorAll('#branchesCheckboxGroup input[type="checkbox"]:checked');
+            const branchesName = Array.from(branchCheckboxes).map(cb => cb.value).join(', ');
+            
+            const topNotifications = document.getElementById('permissionTopNotifications').checked;
+            const sms = document.getElementById('permissionSMS').checked;
+
+            if (!companyId || !userName) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill all required fields',
+                    confirmButtonColor: '#E67E00'
+                });
+                return;
+            }
+
+            // Check for duplicate permission
+            const company = companies.find(c => c.id === companyId);
+            const companyName = company ? company.title : '';
+            const existingPermission = permissions.find(p => 
+                p.companyName === companyName && p.userName === userName
+            );
+
+            if (existingPermission) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Duplicate Role',
+                    text: `A role already exists for ${userName} in ${companyName}`,
+                    confirmButtonColor: '#E67E00'
+                });
+                return;
+            }
+
+            const newPermission = {
+                id: Date.now().toString(),
+                companyId: companyId,
+                companyName: company ? company.title : '',
+                userName: userName,
+                userType: 'Team Leader', // Default user role
+                isActive: true, // Default to active
+                createTicket: createTicket,
+                assignToTech: assignToTech,
+                viewTicketPending: viewTicketPending,
+                editTicketPending: editTicketPending,
+                viewTicketRescheduling: viewTicketRescheduling,
+                editTicketRescheduling: editTicketRescheduling,
+                viewTicketCompleted: viewTicketCompleted,
+                viewTicketClosed: viewTicketClosed,
+                branchesName: branchesName || 'N/A',
+                topNotifications: topNotifications,
+                sms: sms,
+                pushNotification: false // Default to false
+            };
+
+            // Add the new permission at the beginning (newest first)
+            permissions.unshift(newPermission);
+            console.log('New permission added:', newPermission);
+            
+            // Save to localStorage
+            savePermissions();
+            console.log('Permissions saved to localStorage');
+            
+            // Reset filter and display
+            filteredPermissions = null; // Reset filter
+            currentPage = 1; // Reset to first page
+            displayPermissions();
+            closeAddPermissionModal();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Permission Added Successfully!',
+                text: `Permission for ${userName} in ${companyName} has been saved`,
+                confirmButtonColor: '#E67E00',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
+    </script>
+</body>
+</html>
+
